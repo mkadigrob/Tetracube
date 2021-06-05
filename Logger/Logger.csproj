@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{382EFB66-001D-4971-BE26-5CA294CC5A34}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Tetracube</RootNamespace>
-    <AssemblyName>Tetracube</AssemblyName>
+    <ProjectGuid>{D0460ABF-8C52-461E-95BF-2D8B6FCD1751}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Logger</RootNamespace>
+    <AssemblyName>Logger</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,15 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logger.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ArchiveLogException.cs" />
+    <Compile Include="FileLogger.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="LoggerErrorEventArgs.cs" />
+    <Compile Include="Messages\ErrorLogMessage.cs" />
+    <Compile Include="Messages\InfoLogMessage.cs" />
+    <Compile Include="Messages\LogMessage.cs" />
+    <Compile Include="Messages\TraceLogMessage.cs" />
+    <Compile Include="Messages\WarningLogMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Remarks.txt" />
+    <Compile Include="UnknownLogMessageException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
