@@ -117,7 +117,7 @@ namespace Logger
             }
             catch (Exception ex)
             {
-                throw new ArchiveLogException("Ошибка при архивировании лога", ex);
+                RaiseError(new ArchiveLogException(ex));
             }
         }
 

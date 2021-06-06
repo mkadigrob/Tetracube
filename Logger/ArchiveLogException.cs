@@ -4,6 +4,6 @@ namespace Logger
 {
     public class ArchiveLogException : Exception
     {
-        public ArchiveLogException(string message, Exception innerException) : base(message, innerException) { }
+        public ArchiveLogException(Exception innerException) : base("Ошибка при архивировании лога", innerException) { }
     }
 }
