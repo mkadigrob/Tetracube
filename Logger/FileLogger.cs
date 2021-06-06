@@ -15,6 +15,10 @@ namespace Logger
         public FileLogger(string fileName, long maxFileSize, Encoding encoding)
         {
             _file = new FileInfo(fileName);
+
+            if (!_file.Directory.Exists)
+                _file.Directory.Create();
+
             MaxFileSize = maxFileSize;
             Encoding = encoding;
 
