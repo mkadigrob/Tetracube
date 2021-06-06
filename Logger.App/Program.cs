@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 
 namespace Logger.App
@@ -30,7 +31,16 @@ namespace Logger.App
 
         static ILogger CreateFileLogger()
         {
-            var logger = new FileLogger("Test.log", 1000, Encoding.UTF8);
+            Action<string> archivator = fileName =>
+            {
+                var archiveFileName = Path.Combine(
+                    Path.GetDirectoryName(fileName),
+                    Path.GetFileNameWithoutExtension(fileName) + DateTime.UtcNow.ToString("_yyyyMMdd_HHmmssfff") + Path.GetExtension(fileName));
+
+                File.Copy(fileName, archiveFileName);
+            };
+
+            var logger = new FileLogger("Test.log", 1000, Encoding.UTF8, archivator);
 
             logger.RegisterMessage<DebugLogMessage>(msg => $"{msg.Timestamp:dd-MM-yyyy HH:mm:ss.fff} [DEBUG]: {msg.Message}");
 

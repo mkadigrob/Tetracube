@@ -10,15 +10,17 @@ namespace Logger
     {
         private readonly Dictionary<Type, Func<LogMessage, string>> _converters = new Dictionary<Type, Func<LogMessage, string>>();
         private readonly FileInfo _file;
+        private readonly Action<string> _archivator;
 
 
-        public FileLogger(string fileName, long maxFileSize, Encoding encoding)
+        public FileLogger(string fileName, long maxFileSize, Encoding encoding, Action<string> archivator)
         {
             _file = new FileInfo(fileName);
 
             if (!_file.Directory.Exists)
                 _file.Directory.Create();
 
+            _archivator = archivator;
             MaxFileSize = maxFileSize;
             Encoding = encoding;
 
@@ -94,7 +96,12 @@ namespace Logger
 
         private void Write(string message, bool truncate)
         {
-            var fileMode = truncate ? FileMode.Truncate : FileMode.Append;
+            var fileMode = FileMode.Append;
+
+            _file.Refresh();
+
+            if (_file.Exists && truncate)
+                fileMode = FileMode.Truncate;
 
             using (var sw = new StreamWriter(_file.Open(fileMode, FileAccess.Write), Encoding))
             {
@@ -102,23 +109,15 @@ namespace Logger
             }
         }
 
-        private string GetArchiveFileName()
-        {
-            return Path.Combine(
-                _file.DirectoryName,
-                Path.GetFileNameWithoutExtension(_file.Name) + DateTime.Now.ToString("_yyyyMMdd_HHmmssfff") + Path.GetExtension(_file.Name));
-        }
-
         private void Archive()
         {
-            var archiveFileName = GetArchiveFileName();
             try
             {
-                _file.CopyTo(archiveFileName);
+                _archivator?.Invoke(_file.FullName);
             }
             catch (Exception ex)
             {
-                throw new ArchiveLogException(archiveFileName, ex);
+                throw new ArchiveLogException("Ошибка при архивировании лога", ex);
             }
         }
 
